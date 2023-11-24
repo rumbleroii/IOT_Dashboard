@@ -5,27 +5,27 @@ const navigation = [
   {
     title: "EV Monitoring",
     href: "/1",
-    icon: "bi bi-bell",
+    icon: "bi bi-tree",
   },
   {
     title: "Hypothermic Sensors",
     href: "/2",
-    icon: "bi bi-speedometer2",
+    icon: "bi bi-thermometer-half",
   },
   {
     title: "Heartbeat Sensors",
     href: "/3",
-    icon: "bi bi-patch-check",
+    icon: "bi bi-heart-pulse",
   },
   {
     title: "Sleep Monitoring",
     href: "/4",
-    icon: "bi bi-hdd-stack",
+    icon: "bi bi-display",
   },
   {
     title: "RFID Tags",
     href: "/5",
-    icon: "bi bi-card-text",
+    icon: "bi bi-tags",
   },
 ];
 
