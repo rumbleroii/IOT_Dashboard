@@ -3,27 +3,27 @@ import { Link, useLocation } from "react-router-dom";
 
 const navigation = [
   {
-    title: "RFID Tags",
+    title: "EV Monitoring",
     href: "/1",
     icon: "bi bi-bell",
   },
   {
-    title: "Team 2",
+    title: "Hypothermic Sensors",
     href: "/2",
     icon: "bi bi-speedometer2",
   },
   {
-    title: "Team 3",
+    title: "Heartbeat Sensors",
     href: "/3",
     icon: "bi bi-patch-check",
   },
   {
-    title: "Team 4",
+    title: "Sleep Monitoring",
     href: "/4",
     icon: "bi bi-hdd-stack",
   },
   {
-    title: "Team 5",
+    title: "RFID Tags",
     href: "/5",
     icon: "bi bi-card-text",
   },

@@ -5,32 +5,17 @@ import TopCards from "../components/dashboard/TopCards";
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
 
-const tableData = [
-  {
-    RFID: "ID1232",
-    name: "ECG Monitor",
-    latitude: "23434",
-    longitude: "234234",   
-    status: "pending",
-  },
-  {
-    RFID: "ID1232",
-    name: "Kidney Stone Monitor",
-    latitude: "23434",
-    longitude: "234234",   
-    status: "pending",
-  },
-  {
-    RFID: "ID1232",
-    name: "Kidney Stone Monitor",
-    latitude: "23434",
-    longitude: "234234",   
-    status: "pending",
-  },
-];
-
 const Starter = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([{
+    RID: 1,
+    SID: 2,
+    Readings: {
+      Temperature: 10,
+      Humidity: 10,
+      AirQuality: 10,
+      Light: 45
+    }
+  }]);
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
@@ -51,7 +36,7 @@ const Starter = () => {
   return (
     <div>
       {/***Top Cards***/}
-      <h1>RFID Tags</h1>
+      <h1>Environmental Monitoring</h1>
       <br></br>
       <Row>
         <Col sm="6" lg="3">
@@ -77,9 +62,11 @@ const Starter = () => {
               <thead>
                 <tr>
                   <th>RFID</th>
-                  <th>Equipment Name</th>
-                  <th>Location</th>
-                  <th>Status</th>
+                  <th>SID</th>
+                  <th>Temperature</th>
+                  <th>Light</th>
+                  <th>Air Quality</th>
+                  <th>Humidity</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,27 +75,24 @@ const Starter = () => {
                     <td>
                       <div className="d-flex align-items-center p-2">
                         <div className="ms-3">
-                          <h6 className="mb-0">{tdata.RFID}</h6>
+                          <h6 className="mb-0">{tdata.RID}</h6>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <h6 className="mb-0">{tdata.name}</h6>
+                      <h6 className="mb-0">{tdata.SID}</h6>
                     </td>
                     <td>
-                      <h6 className="mb-0">{tdata.latitude}</h6>
+                      <h6 className="mb-0">{tdata.Readings.Temperature}</h6>
                     </td>
                     <td>
-                      <h6 className="mb-0">{tdata.longitude}</h6>
+                      <h6 className="mb-0">{tdata.Readings.Light}</h6>
                     </td>
                     <td>
-                      {tdata.status === "pending" ? (
-                        <span className="p-2 bg-danger rounded-circle d-inline-block ms-3"></span>
-                      ) : tdata.status === "holt" ? (
-                        <span className="p-2 bg-warning rounded-circle d-inline-block ms-3"></span>
-                      ) : (
-                        <span className="p-2 bg-success rounded-circle d-inline-block ms-3"></span>
-                      )}
+                      <h6 className="mb-0">{tdata.Readings.AirQuality}</h6>
+                    </td>
+                    <td>
+                      <h6 className="mb-0">{tdata.Readings.Humidity}</h6>
                     </td>
                   </tr>
                 ))}
@@ -119,11 +103,11 @@ const Starter = () => {
         </Col>
       </Row>
       {/***Sales & Feed***/}
-      <Row>
+      {/* <Row>
         <Col xxl="12">
           <SalesChart />
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 };

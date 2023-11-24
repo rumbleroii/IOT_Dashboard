@@ -2,6 +2,7 @@ import { Col, Row } from "reactstrap";
 import SalesChart from "../components/dashboard/SalesChart";
 import TopCards from "../components/dashboard/TopCards";
 
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
 
 const tableData = [
@@ -35,10 +36,36 @@ const tableData = [
 ];
 
 const Starter = () => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch data
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5124/api/team5');
+        const result = await response.json();
+        setData(result);
+        setTotalCount(result.length);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchData();
+
+    // Set up an interval to fetch data every 5 seconds (adjust the interval as needed)
+    const intervalId = setInterval(fetchData, 5000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div>
       {/***Top Cards***/}
-      <h1>Team 5</h1>
+      <h1>RFID Tags</h1>
       <br></br>
       <Row>
         <Col sm="6" lg="3">
@@ -89,13 +116,13 @@ const Starter = () => {
               <thead>
                 <tr>
                   <th>RFID</th>
-                  <th>Equipment Name</th>
+                  <th>Equipment ID</th>
                   <th>Status</th>
                   <th>Location</th>
                 </tr>
               </thead>
               <tbody>
-                {tableData.map((tdata, index) => (
+                {data.map((tdata, index) => (
                   <tr key={index} className="border-top">
                     <td>
                       <div className="d-flex align-items-center p-2">
@@ -104,24 +131,21 @@ const Starter = () => {
                         </div>
                       </div>
                     </td>
-                    <td>{tdata.name}</td>
+                      <td>{tdata.Readings.Equipment_ID}</td>
                     <td>
                       <div>
-                        <p>Latitude: {tdata.location.latitude}</p>
-                        <p>Longitude: {tdata.location.longitude}</p>
+                        <p>Latitude: {tdata.Readings.latitude}</p>
+                        <p>Longitude: {tdata.Readings.longitude}</p>
                       </div>
                     </td>
                     <td>
-                      {tdata.status === "pending" ? (
+                      {tdata.Readings.Power === 0 ? (
                         <span className="p-2 bg-danger rounded-circle d-inline-block ms-3"></span>
-                      ) : tdata.status === "holt" ? (
+                      ) : tdata.status === 1 ? (
                         <span className="p-2 bg-warning rounded-circle d-inline-block ms-3"></span>
                       ) : (
                         <span className="p-2 bg-success rounded-circle d-inline-block ms-3"></span>
                       )}
-                    </td>
-                    <td>
-                      <button>View More</button>
                     </td>
                   </tr>
                 ))}
@@ -132,11 +156,11 @@ const Starter = () => {
         </Col>
       </Row>
       {/***Sales & Feed***/}
-      <Row>
+      {/* <Row>
         <Col xxl="12">
           <SalesChart />
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { Col, Row } from "reactstrap";
 import SalesChart from "../components/dashboard/SalesChart";
 import TopCards from "../components/dashboard/TopCards";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
 
 const Starter = () => {
