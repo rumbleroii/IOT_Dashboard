@@ -9,23 +9,26 @@ import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
 //   {
 //     RID: "101",
 //     ID: "1",
-//     Temperature: 40
+//     Readings {}
+//      Temperature: 40
+//     }
 //     Team
 //     Time
 //   },
 // ];
 
 const Starter = () => {
-  const [data, setData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     // Function to fetch data
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/team2');
+        const response = await fetch('http://localhost:5124/api/data');
         const result = await response.json();
         setData(result);
+        setTotalCount(result.length);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -44,7 +47,7 @@ const Starter = () => {
   return (
     <div>
       {/***Top Cards***/}
-      <h1>Hypothermic Sensor</h1>
+      <h1>Heartbeat Sensor</h1>
       <br></br>
       <Row>
         <Col sm="6" lg="3">
@@ -70,8 +73,8 @@ const Starter = () => {
               <thead>
                 <tr>
                   <th>RID</th>
-                  <th>ID</th>
-                  <th>Temperature</th>
+                  <th>SID</th>
+                  <th>Readings</th>
                 </tr>
               </thead>
               <tbody>
@@ -85,10 +88,11 @@ const Starter = () => {
                       </div>
                     </td>
                     <td>
-                        <h6 className="mb-0">{tdata.ID}</h6>
+                        <h6 className="mb-0">{tdata.SID}</h6>
                     </td>
                     <td>
-                        <h6 className="mb-0">{tdata.Temperature}</h6>
+                        <h6 className="mb-0">BPM: {tdata.Readings.BPM}</h6>
+                        <h6 className="mb-0">HRV: {tdata.Readings.HRV}</h6>
                     </td>
                   </tr>
                 ))}
