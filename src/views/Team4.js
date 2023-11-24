@@ -5,21 +5,37 @@ import TopCards from "../components/dashboard/TopCards";
 import React, { useState } from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
 
-const tableData = [
-  {
-    RID: "101",
-    Quality: 40,
-    Snoring: "True",
-    SleepApnea: "True",
-  }
-];
-
 const Starter = () => {
-  const [totalCount, setTotalCount] = useState(tableData.length);
+  const [totalCount, setTotalCount] = useState(0);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch data
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5124/api/team4');
+        const result = await response.json();
+        setData(result);
+        setTotalCount(result.length);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchData();
+
+    // Set up an interval to fetch data every 5 seconds (adjust the interval as needed)
+    const intervalId = setInterval(fetchData, 5000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+  
   return (
     <div>
       {/***Top Cards***/}
-      <h1>Team 4</h1>
+      <h1>Sleep Monitoring System</h1>
       <br></br>
       <Row>
         <Col sm="6" lg="3">
@@ -28,31 +44,6 @@ const Starter = () => {
             title="Total Sensors"
             subtitle="Total Sensors"
             earning={totalCount}
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-success text-success"
-            title="Active Sensors"
-            subtitle="Active Sensors"
-            earning="1"
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-danger text-danger"
-            title="Halted Sensors"
-            subtitle="Halted Sensors"
-            earning="1"
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-warning text-warning"
-            title="Paused Sensors"
-            subtitle="Paused Sensors"
-            earning="1"
-            icon="bi bi-basket3"
           />
         </Col>
       </Row>
@@ -70,13 +61,14 @@ const Starter = () => {
               <thead>
                 <tr>
                   <th>RID</th>
+                  <th>SID</th>
                   <th>Quality</th>
                   <th>Snoring</th>
                   <th>Sleep Apnea</th>
                 </tr>
               </thead>
               <tbody>
-                {tableData.map((tdata, index) => (
+                {data.map((tdata, index) => (
                   <tr key={index} className="border-top">
                     <td>
                       <div className="d-flex align-items-center p-2">
@@ -86,22 +78,16 @@ const Starter = () => {
                       </div>
                     </td>
                     <td>
-                      <h6 className="mb-0">{tdata.Quality}</h6>
+                      <h6 className="mb-0">{tdata.Readings.SID}</h6>
                     </td>
                     <td>
-                      <h6 className="mb-0">{tdata.Snoring}</h6>
+                      <h6 className="mb-0">{tdata.Readings.Quality}</h6>
                     </td>
                     <td>
-                      <h6 className="mb-0">{tdata.SleepApnea}</h6>
+                      <h6 className="mb-0">{tdata.Readings.Snoring}</h6>
                     </td>
                     <td>
-                      {tdata.status === "pending" ? (
-                        <span className="p-2 bg-danger rounded-circle d-inline-block ms-3"></span>
-                      ) : tdata.status === "holt" ? (
-                        <span className="p-2 bg-warning rounded-circle d-inline-block ms-3"></span>
-                      ) : (
-                        <span className="p-2 bg-success rounded-circle d-inline-block ms-3"></span>
-                      )}
+                      <h6 className="mb-0">{tdata.Readings.Apnea}</h6>
                     </td>
                   </tr>
                 ))}

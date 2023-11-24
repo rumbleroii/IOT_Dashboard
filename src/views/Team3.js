@@ -25,7 +25,7 @@ const Starter = () => {
     // Function to fetch data
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5124/api/data');
+        const response = await fetch('http://localhost:5124/api/team3');
         const result = await response.json();
         setData(result);
         setTotalCount(result.length);
