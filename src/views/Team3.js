@@ -2,24 +2,49 @@ import { Col, Row } from "reactstrap";
 import SalesChart from "../components/dashboard/SalesChart";
 import TopCards from "../components/dashboard/TopCards";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
 
-const tableData = [
-  {
-    RID: "101",
-    ID: "1",
-    Temperature: 40
-  },
-];
+// const tableData = [
+//   {
+//     RID: "101",
+//     ID: "1",
+//     Temperature: 40
+//     Team
+//     Time
+//   },
+// ];
 
 const Starter = () => {
-  const [totalCount, setTotalCount] = useState(tableData.length);
+  const [data, setData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+
+  useEffect(() => {
+    // Function to fetch data
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/team2');
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchData();
+
+    // Set up an interval to fetch data every 5 seconds (adjust the interval as needed)
+    const intervalId = setInterval(fetchData, 5000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
   
   return (
     <div>
       {/***Top Cards***/}
-      <h1>Team 3</h1>
+      <h1>Hypothermic Sensor</h1>
       <br></br>
       <Row>
         <Col sm="6" lg="3">
@@ -28,31 +53,6 @@ const Starter = () => {
             title="Total Sensors"
             subtitle="Total Sensors"
             earning={totalCount}
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-success text-success"
-            title="Active Sensors"
-            subtitle="Active Sensors"
-            earning="1"
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-danger text-danger"
-            title="Halted Sensors"
-            subtitle="Halted Sensors"
-            earning="1"
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-warning text-warning"
-            title="Paused Sensors"
-            subtitle="Paused Sensors"
-            earning="1"
-            icon="bi bi-basket3"
           />
         </Col>
       </Row>
@@ -72,11 +72,10 @@ const Starter = () => {
                   <th>RID</th>
                   <th>ID</th>
                   <th>Temperature</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {tableData.map((tdata, index) => (
+                {data.map((tdata, index) => (
                   <tr key={index} className="border-top">
                     <td>
                       <div className="d-flex align-items-center p-2">
@@ -91,15 +90,6 @@ const Starter = () => {
                     <td>
                         <h6 className="mb-0">{tdata.Temperature}</h6>
                     </td>
-                    <td>
-                      {tdata.status === "pending" ? (
-                        <span className="p-2 bg-danger rounded-circle d-inline-block ms-3"></span>
-                      ) : tdata.status === "holt" ? (
-                        <span className="p-2 bg-warning rounded-circle d-inline-block ms-3"></span>
-                      ) : (
-                        <span className="p-2 bg-success rounded-circle d-inline-block ms-3"></span>
-                      )}
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -109,11 +99,11 @@ const Starter = () => {
         </Col>
       </Row>
       {/***Sales & Feed***/}
-      <Row>
+      {/* <Row>
         <Col xxl="12">
           <SalesChart />
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 };

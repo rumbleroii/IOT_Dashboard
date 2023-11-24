@@ -2,7 +2,7 @@ import { Col, Row } from "reactstrap";
 import SalesChart from "../components/dashboard/SalesChart";
 import TopCards from "../components/dashboard/TopCards";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
 
 const tableData = [
@@ -30,7 +30,24 @@ const tableData = [
 ];
 
 const Starter = () => {
-  const [totalCount, setTotalCount] = useState(tableData.length);
+  const [data, setData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5124/api/team1');
+        const result = await response.json();
+        setData(result);
+        setTotalCount(result.length);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
       {/***Top Cards***/}
@@ -43,31 +60,6 @@ const Starter = () => {
             title="Total Sensors"
             subtitle="Total Sensors"
             earning={totalCount}
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-success text-success"
-            title="Active Sensors"
-            subtitle="Active Sensors"
-            earning="1"
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-danger text-danger"
-            title="Halted Sensors"
-            subtitle="Halted Sensors"
-            earning="1"
-          />
-        </Col>
-        <Col sm="6" lg="3">
-          <TopCards
-            bg="bg-light-warning text-warning"
-            title="Paused Sensors"
-            subtitle="Paused Sensors"
-            earning="1"
-            icon="bi bi-basket3"
           />
         </Col>
       </Row>
@@ -86,12 +78,12 @@ const Starter = () => {
                 <tr>
                   <th>RFID</th>
                   <th>Equipment Name</th>
-                  <th>Status</th>
                   <th>Location</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {tableData.map((tdata, index) => (
+                {data.map((tdata, index) => (
                   <tr key={index} className="border-top">
                     <td>
                       <div className="d-flex align-items-center p-2">
